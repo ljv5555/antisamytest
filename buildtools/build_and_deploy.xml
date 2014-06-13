@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Mar 24, 2014 2:31:53 PM                                                        
+
+     run-central-dev    
+     run central on dev server
+                   
+jverderber                                                                
+====================================================================== -->
+<project name="build_and_deploy" default="default" basedir="..">
+    <description>
+        copy war
+    </description>
+
+    <property file="${ant.file}.properties" prefix="props" />
+    <property name="tomcat_config_dir" location="${props.tomcat_home}/conf/Catalina/localhost" />
+    <property name="tomcat_webapps_dir" location="${props.tomcat_home}/webapps" />
+		
+        
+    <target name="default">
+    	<antcall target="stop_tomcat"/>
+		<antcall target="maven_build"/>
+    	<copy file="target/antisamitest.war" todir="${tomcat_webapps_dir}" 
+    		overwrite="true" 
+    		failonerror="true"
+    		verbose="true"
+    	/>
+    	<deltree dir="${tomcat_webapps_dir}/antisami" />
+    	<antcall target="start_tomcat"/>
+    			
+    </target>
+    <target name="start_tomcat">
+        <!-- timeout is 10 hours -->
+        <sleep seconds="5" />
+        <exec executable="cmd" failifexecutionfails="false" failonerror="false" dir="${props.tomcat_home}/bin/" timeout="36000000">
+            <arg value="/C" />
+            <arg value="&quot;${props.tomcat_home}/bin/startup.bat&quot;" />
+        </exec>
+        <sleep seconds="5" />
+    </target>
+
+    <target name="stop_tomcat">
+        <!-- timeout is 5 minutes -->
+        <exec executable="cmd" failifexecutionfails="false" failonerror="false" dir="${props.tomcat_home}/bin/" timeout="300000">
+            <arg value="/C" />
+            <arg value="&quot;${props.tomcat_home}/bin/shutdown.bat&quot;" />
+        </exec>
+        <sleep seconds="5" />
+    </target>
+    <target name="maven_build">
+    	<!-- timeout = 10 minutes -->
+        <exec executable="cmd" failifexecutionfails="true" failonerror="true" dir="${basedir}" timeout="600000">
+            <arg value="/C" />
+            <arg value="${props.maven_home}/bin/mvn" />
+            <arg value="clean" />
+            <arg value="install" />
+        </exec>
+    </target>
+	<target name="copyIndex">
+		<copy file="src/main/webapp/index.jsp" todir="${tomcat_webapps_dir}" overwrite="true" verbose="true" />
+	</target>
+
+</project>
