@@ -2,26 +2,35 @@
 <%@page import="com.touchnet.test.antisamy.AntiSamyBean"%>
 <html>
 <head>
+<meta charset="ISO-8859-1">
 <title>AntiSamy Test</title>
 <style type="text/css">
 body,body *{font-family: arial;color:blue;}
-textarea{
+textarea,iframe{
+resize: both;
 width:90%;
 height:100px;
 margin:5px 5% 5px 5%;
 font-family: courier new;
 font-size: 10.5px;
+border-radius:4px;
 }
-.d{margin:5px 5px 5px 5px;padding:5px 5px 5px 5px;color:white;background:blue;}
+iframe{height:227px;border:1px solid white;border-radius:4px;}
+.d{margin:5px 5px 5px 5px;padding:5px 5px 5px 5px;color:white;background:blue;border-radius:4px;}
+button,input{border-radius:4px;border:1px solid white;background:blue;color:white;}
+.cleanhtmltrue{color:green;font-weight:800;}
+.cleanhtmlfalse{color:red;font-weight:800;}
+
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </head>
 <body>
 <form target="oframe" method="post" action="processAntiSami.jsp">
 <h2>AntiSamy Test</h2>
 <% AntiSamyBean asb = new AntiSamyBean(request);   %>
 <div class="d">
-	policy file: <br/>
-	<textarea name="policy">
+	policy file:  - others available from <a href="https://code.google.com/p/owaspantisamy/downloads/list" target="_blank">owaspantisamy</a><br/>
+<textarea name="policy">
 <?xml version="1.0" encoding="ISO-8859-1"?>
 	
 <!-- 
@@ -29,18 +38,13 @@ W3C rules retrieved from:
 http://www.w3.org/TR/html401/struct/global.html
 -->
 	
-<!--
-Slashdot allowed tags taken from "Reply" page:
-<b> <i> <p> <br> <a> <ol> <ul> <li> <dl> <dt> <dd> <em> <strong> <tt> <blockquote> <div> <ecode> <quote>
--->
-
 <anti-samy-rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:noNamespaceSchemaLocation="antisamy.xsd">
 	
 	<directives>
 		<directive name="omitXmlDeclaration" value="true"/>
 		<directive name="omitDoctypeDeclaration" value="true"/>
-		<directive name="maxInputSize" value="5000"/>
+		<directive name="maxInputSize" value="200000"/>
 		<directive name="useXHTML" value="true"/>
 		<directive name="formatOutput" value="true"/>
 		
@@ -48,87 +52,14 @@ Slashdot allowed tags taken from "Reply" page:
 	</directives>
 	
 	<common-regexps>
-		
-		<!-- 
-		From W3C:
-		This attribute assigns a class name or set of class names to an
-		element. Any number of elements may be assigned the same class
-		name or names. Multiple class names must be separated by white 
-		space characters.
-		-->
-		
-		<regexp name="htmlTitle" value="[\p{L}\p{N}\s\-_',:\[\]!\./\\\(\)&]*"/> <!-- force non-empty with a '+' at the end instead of '*' -->
-		<regexp name="onsiteURL" value="([\p{L}\p{N}\\/\.\?=\#&;\-_~]+|\#(\w)+)"/>
-		<regexp name="offsiteURL" value="(\s)*((ht|f)tp(s?)://|mailto:)[\p{L}\p{N}]+[~\p{L}\p{N}\p{Zs}\-_\.@\#\$%&;:,\?=/\+!\(\)]*(\s)*"/>
-	
 	</common-regexps>
 	
-	<!-- 
-	
-	Tag.name = a, b, div, body, etc.
-	Tag.action = filter: remove tags, but keep content, validate: keep content as long as it passes rules, remove: remove tag and contents
-	Attribute.name = id, class, href, align, width, etc.
-	Attribute.onInvalid = what to do when the attribute is invalid, e.g., remove the tag (removeTag), remove the attribute (removeAttribute), filter the tag (filterTag)
-	Attribute.description = What rules in English you want to tell the users they can have for this attribute. Include helpful things so they'll be able to tune their HTML
-	 
-	 -->
-
-	<!-- 
-	Some attributes are common to all (or most) HTML tags. There aren't many that qualify for this. You have to make sure there's no
-	collisions between any of these attribute names with attribute names of other tags that are for different purposes.
-	-->
-
 	<common-attributes>
-		
-
-		<attribute name="lang" description="The 'lang' attribute tells the browser what language the element's attribute values and content are written in">
-		 	<regexp-list>
-		 		<regexp value="[a-zA-Z]{2,20}"/>
-		 	</regexp-list>
-		 </attribute>
-		 
-		 <attribute name="title" description="The 'title' attribute provides text that shows up in a 'tooltip' when a user hovers their mouse over the element">
-		 	<regexp-list>
-		 		<regexp name="htmlTitle"/>
-		 	</regexp-list>
-		 </attribute>
-
-		<attribute name="href" onInvalid="filterTag">
-			<regexp-list>
-				<regexp name="onsiteURL"/>
-				<regexp name="offsiteURL"/>
-			</regexp-list>
-		</attribute>
-	
-		<attribute name="align" description="The 'align' attribute of an HTML element is a direction word, like 'left', 'right' or 'center'">
-			<literal-list>
-				<literal value="center"/>
-				<literal value="left"/>
-				<literal value="right"/>
-				<literal value="justify"/>
-				<literal value="char"/>
-			</literal-list>
-		</attribute>
-
 	</common-attributes>
 
-
-	<!--
-	This requires normal updates as browsers continue to diverge from the W3C and each other. As long as the browser wars continue
-	this is going to continue. I'm not sure war is the right word for what's going on. Doesn't somebody have to win a war after 
-	a while?
-	 -->
-	
 	<global-tag-attributes>
-		<attribute name="title"/>
-		<attribute name="lang"/>
 	</global-tag-attributes>
 
-	<tags-to-encode>
-		<tag>g</tag>
-		<tag>grin</tag>
-	</tags-to-encode>
-	
 	<tag-rules>
 
 		<!-- Tags related to JavaScript -->
@@ -146,72 +77,32 @@ Slashdot allowed tags taken from "Reply" page:
 		<!-- CSS related tags -->
 		<tag name="style" action="remove"/>
 
-		<!-- All reasonable formatting tags -->
-		
-		<tag name="p" action="validate">
-			<attribute name="align"/>
-		</tag>
-
-		<tag name="div" action="validate"/>		
-		<tag name="i" action="validate"/>
-		<tag name="b" action="validate"/>
-		<tag name="em" action="validate"/>
-		<tag name="blockquote" action="validate"/>
-		<tag name="tt" action="validate"/>
-		<tag name="strong" action="validate"/>
-		
-		<tag name="br" action="truncate"/>
-
-		<!-- Custom Slashdot tags, though we're trimming the idea of having a possible mismatching end tag with the endtag="" attribute -->
-		
-		<tag name="quote" action="validate"/>
-		<tag name="ecode" action="validate"/> 
-		
-						
-		<!-- Anchor and anchor related tags -->
-		
-		<tag name="a" action="validate">
-
-			<attribute name="href" onInvalid="filterTag"/>
-			<attribute name="nohref">
-				<literal-list>
-					<literal value="nohref"/>
-					<literal value=""/>
-				</literal-list>
-			</attribute>
-			<attribute name="rel">
-				<literal-list>
-					<literal value="nofollow"/>
-				</literal-list>
-			</attribute>
-		</tag>
-
-		<!-- List tags -->
-
-		<tag name="ul" action="validate"/>
-		<tag name="ol" action="validate"/>
-		<tag name="li" action="validate"/>
-		
 	</tag-rules>
 
-
-
-	<!--  No CSS on Slashdot posts -->
+	<!--  No CSS -->
 
 	<css-rules>
 	</css-rules>
 
 </anti-samy-rules>
-	</textarea>
+</textarea>
 </div>
 <div class="d">
 	test input:<br/>
-	<textarea name="inputhtml"></textarea>
+<textarea name="inputhtml" id="inputhtml">
+
+</textarea>
 	<br/><input type="submit" value="run test"/>
 </div>
 <div class="d">
-	<iframe name="oframe" id="oframe" style="width:90%;" src="about:blank"></iframe>
+	<iframe  name="oframe" id="oframe" src="about:blank"></iframe>
 </div>
 </form>
+<script>
+setTimeout(function(){
+var h = '<div>\r\n<span>in span&nbsp;-&nbsp;</span>\r\n<textarea>in ta</textarea>\r\n<br/><b>this is bold!</b>\r\n</div>\r\n';
+document.getElementById('inputhtml').value=h;
+},1000);
+</script>
 </body>
 </html>
