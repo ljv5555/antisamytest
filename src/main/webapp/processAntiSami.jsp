@@ -23,7 +23,7 @@ pre{background:white;}
 </style>
 <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+<script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
 
 </head>
 <body>
