@@ -25,18 +25,6 @@ a,a:visited,a:active,a:hover{color:#bcf;}
 <link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
-<script>
-function loadxml()
-{
-	jQuery.get('antisamy-touchnet_white_list.xml',
-	function(a,b,c)
-	{
-		window.rxs=c;
-		window.rxe=c.responseXML.getElementsByTagName('*')[0];
-		jQuery('#policy').val('<?xml version="1.0"?>\r\n'+window.rxe.outerHTML);
-	});
-}
-</script>
 </head>
 <body>
 <form target="oframe" method="post" action="processAntiSami.jsp" onsubmit=" return reformatdata()">
@@ -130,7 +118,7 @@ document.getElementById('inputhtml').value=h;
 
 function reformatdata()
 {
-	$('.formattedprefromta').each(function(i,e){$(e).prev.val($(e).text());$(e).remove();});
+	$('.formattedprefromta').each(function(i,e){$(e).prev().slideDown()/*.val($(e).text())*/;$(e).remove();});
 		
 		
 		
@@ -166,7 +154,17 @@ function reformatdata()
 $(document).ready(function() {
 reformatdata();  
 });
-
+function loadxml()
+{
+	jQuery.get('antisamy-touchnet_white_list.xml',
+	function(a,b,c)
+	{
+		window.rxs=c;
+		window.rxe=c.responseXML.getElementsByTagName('*')[0];
+		jQuery('#policy').val('<?xml version="1.0"?>\r\n'+window.rxe.outerHTML);
+		reformatdata();
+	});
+}
 </script>
 
 </body>
