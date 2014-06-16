@@ -20,6 +20,7 @@ iframe{height:227px;border:1px solid white;border-radius:4px;}
 button,input{border-radius:4px;border:1px solid white;background:blue;color:white;}
 .cleanhtmltrue{color:green;font-weight:800;}
 .cleanhtmlfalse{color:red;font-weight:800;}
+a,a:visited,a:active,a:hover{color:#bcf;}
 
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -29,7 +30,7 @@ button,input{border-radius:4px;border:1px solid white;background:blue;color:whit
 <h2>AntiSamy Test</h2>
 <% AntiSamyBean asb = new AntiSamyBean(request);   %>
 <div class="d">
-	policy file:  - others available from <a href="https://code.google.com/p/owaspantisamy/downloads/list" target="_blank">owaspantisamy</a><br/>
+	policy file:  - others available from <a class="asa" href="https://code.google.com/p/owaspantisamy/downloads/list" target="_blank">owaspantisamy</a><br/>
 <textarea name="policy">
 <?xml version="1.0" encoding="ISO-8859-1"?>
 	
