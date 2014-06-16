@@ -4,7 +4,7 @@
 <head>
 <title>AntiSamy Test Results</title>
 <style type="text/css">
-body,body *{font-family: arial;color:blue;background:white;}
+body,body *{font-family: arial;background:white;}
 textarea,iframe{
 resize: both;
 width:90%;
