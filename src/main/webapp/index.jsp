@@ -21,6 +21,7 @@ button,input{border-radius:4px;border:1px solid white;background:blue;color:whit
 .cleanhtmltrue{color:green;font-weight:800;}
 .cleanhtmlfalse{color:red;font-weight:800;}
 a,a:visited,a:active,a:hover{color:#bcf;}
+pre{background:white;}
 </style>
 <link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

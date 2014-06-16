@@ -15,11 +15,11 @@ font-size: 10.5px;
 border-radius:4px;
 }
 iframe{height:227px;border:1px solid white;border-radius:4px;}
-.d{margin:5px 5px 5px 5px;padding:5px 5px 5px 5px;color:silver;background:#ccf;border-radius:4px;}
+.d{margin:5px 5px 5px 5px;padding:5px 5px 5px 5px;color:grey;background:#ccf;border-radius:4px;}
 button,input{border-radius:4px;border:1px solid white;background:blue;color:white;}
 .cleanhtmltrue{color:green;font-weight:800;}
 .cleanhtmlfalse{color:red;font-weight:800;}
-
+pre{background:white;}
 </style>
 <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
