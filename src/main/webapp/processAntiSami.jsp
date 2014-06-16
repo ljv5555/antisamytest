@@ -21,6 +21,10 @@ button,input{border-radius:4px;border:1px solid white;background:blue;color:whit
 .cleanhtmlfalse{color:red;font-weight:800;}
 
 </style>
+<link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+
 </head>
 <body>
 <% 
@@ -42,5 +46,45 @@ String chtml = asb.scrubHtml(text, policy);
 <%= chtml %>
 </textarea>
 </div>
+<script>
+function reformatdata()
+{
+	$('.formattedprefromta').each(function(i,e){$(e).prev.val($(e).text());$(e).remove();});
+		
+		
+		
+
+		setTimeout(function(){
+		    $('textarea').each(function(i,e){
+		  var tah = $(e).height();
+		  var taw = $(e).width();
+		  $(e).slideUp();      
+		  var jqe = $(e);
+		  var pre = $('<pre>');
+		  pre.addClass('formattedprefromta');
+		  var code = $('<code contenteditable="true"/>');
+		  code.text(jqe.val());
+		  pre.append(code);
+		  jqe.after(pre);
+		  pre.css('display','inline-block');
+		  pre.css('overflow','scroll');
+		  pre.css('height',tah+'px');
+		  pre.css('width',taw+'px');
+		  pre.css('resize','both');
+		  hljs.highlightBlock(code[0]);
+		  code.on('blur',
+		       function(){hljs.highlightBlock(code[0]);code.parent().prev().val(code.text());}
+		         );
+		    
+		    
+		    });
+		},1000);
+		return true;
+}
+
+$(document).ready(function() {
+reformatdata();  
+});
+</script>
 </body>
 </html>
